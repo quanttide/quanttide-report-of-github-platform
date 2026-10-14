@@ -1,6 +1,6 @@
 # 资产子模块初始化复盘：一次「遵循惯例」的考古
 
-读这篇复盘的人只想知道三件事：学到了什么惯例、是怎么学到的、查的哪些资料有用哪些没用。2026-10-14，两次「遵循惯例创建仓库」的指令——feishu 的手册仓，github 的 lab / gallery / report 三仓——都没给仓库名、没给落点、没给模板，惯例散落在多个仓库的实物里。本复盘用一句话回答这三个问题：**惯例不在任何一份文档里，它以「同族仓库的既有实例」为载体——命名从本仓 `.gitmodules` 反推（分代码仓与文档仓两套风格、两个名字），落点与模板从同族实物对照，远端属性从 `gh repo view` 取；能读的都读出来了，读不出的只有许可一处，靠用户补上。**
+读这篇复盘的人只想知道三件事：学到了什么惯例、是怎么学到的、查的哪些资料有用哪些没用。2026-10-14，两次「遵循惯例创建仓库」的指令——feishu 的手册仓，github 的 lab / gallery / report 三仓——都没给仓库名、没给落点、没给模板，惯例散落在多个仓库的实物里。本复盘用一句话回答这三个问题：**惯例不在任何一份文档里，它以「同族仓库的既有实例」为载体——命名从本仓 `.gitmodules` 反推（分代码仓与文档仓两套风格、两个名字），落点、模板与许可从同族实物对照（许可也分两套：代码仓 Apache 2.0、文档仓 CC BY 4.0），远端属性从 `gh repo view` 取。**
 
 ## 一、学到的惯例：七条
 
@@ -16,7 +16,7 @@
 
 第六，提交分两层：先在子仓独立提交推送，再回父仓提交指针与 CHANGELOG（`feat: 注册{类型}子模块（path → repo）`），父仓提交后直接推送。子模块再推进时，父仓另起一次「更新指针」提交。
 
-第七，许可证读不出规律，只能问：同一层资产并不统一，lab 用 Apache 2.0（`quanttide-github-lab`、`quanttide-org-lab`），而手册、报告、案例集用 CC BY 4.0。取材实例之间有分歧时，惯例不再自明。
+第七，许可与命名同轴，也分两套：**代码仓默认 Apache 2.0**（`quanttide-github-lab`、`quanttide-org-lab`），**文档仓默认 CC BY 4.0**（手册、报告、案例集）。当初只看到散例，判成「不统一、只能问」，用户一句纠正后才归拢成这条——规则不写在任何仓里，要从实例按代码 / 文档仓归类才看得出。
 
 ## 二、怎么学到的：从可复算的实物反推，四步
 
@@ -26,7 +26,7 @@
 
 第三步，横向对照同族：要建 handbook 就查 `quanttide-work` / `quanttide-org` / `quanttide-agent` 的手册，落点 `docs/handbook` 与命名先例 `of-knowledge-work` 一次就全；要建 lab / gallery 就看哪个适配仓已经有（feishu 有 lab、pi 有 gallery），读它们的 `.gitmodules` 与 README 结构表。再进子模块看实体（README / CHANGELOG / LICENSE），才拿到模板与许可——README 写着「有 gallery」不等于知道 gallery 里放什么。
 
-第四步，用 `gh repo view --json description,licenseInfo` 查远端属性（中文描述、许可、可见性），这是纯文件里查不到的；有歧义再问用户，许可就是这么定的。
+第四步，用 `gh repo view --json description,licenseInfo` 查远端属性（中文描述、许可、可见性），这是纯文件里查不到的；许可起初只因散例被判成不统一，用户一句「代码仓 Apache 2.0、文档仓 CC BY 4.0」才归拢成规则。
 
 ## 三、查过的资料：有用四类，没用六类
 
@@ -48,6 +48,6 @@
 
 ## 四、边界与落地
 
-边界：本篇只管「按惯例从零建一个资产子模块仓库」这一件事，不管仓库里内容怎么写（那是各类型仓库内部的写作惯例）。样本是两次建仓、四次成功创建、一次否定（许可），够用来说清这条工作线，不够用来断言「许可就该这么选」或「模板永远取最新」。另有一条本属「怎么做」的边界情况未在此展开——空仓库 `git submodule add` 后处于 unborn branch，需进目录手动 commit + `git push -u origin main` 再重跑挂载——其可执行版本已归档为案例，见 `quanttide-gallery-of-github-platform` 的 `second-brain/init-submodule.md`。
+边界：本篇只管「按惯例从零建一个资产子模块仓库」这一件事，不管仓库里内容怎么写（那是各类型仓库内部的写作惯例）。样本是两次建仓、四次成功创建、一次否定（许可），够用来说清这条工作线，不够用来断言「模板永远取最新」或「许可规则不再演进」。另有一条本属「怎么做」的边界情况未在此展开——空仓库 `git submodule add` 后处于 unborn branch，需进目录手动 commit + `git push -u origin main` 再重跑挂载——其可执行版本已归档为案例，见 `quanttide-gallery-of-github-platform` 的 `second-brain/init-submodule.md`。
 
 落地：七条惯例自本次起适用于 `quanttide-feishu` 与 `adapters/quanttide-github` 的资产仓。已建：feishu 手册 `quanttide-handbook-of-feishu-platform`（根提交 `ccd33f8`，父仓指针 `51bdee7`）；github 三仓 `quanttide-github-lab`（`e3738e3` / `e050c53`）、`quanttide-gallery-of-github-platform`（`487df3c` / `4fb778e`）、`quanttide-report-of-github-platform`（`1b0de4d` / `1d8aadf`）。
